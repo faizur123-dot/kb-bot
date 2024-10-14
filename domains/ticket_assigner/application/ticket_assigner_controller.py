@@ -25,7 +25,6 @@ def assign_ticket_to_user(params):
     return facade.create_ticket(bug_description=bug_description, user_name=user_name, bug_category=bug_category)
 
 
-# REVIEW IS INSTANCE REMOVE
 def invoke_function_by_key(key, params):
     try:
         function = key_to_function_map.get(key, None)

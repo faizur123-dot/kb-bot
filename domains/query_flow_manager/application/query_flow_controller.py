@@ -19,7 +19,6 @@ def process_slack_message(params):
     return facade.process_message_received_from_slack(question)
 
 
-# REVIEW IS INSTANCE REMOVE
 def invoke_function_by_key(key, params):
     try:
         function = key_to_function_map.get(key, None)

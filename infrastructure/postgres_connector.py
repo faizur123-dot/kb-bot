@@ -56,13 +56,10 @@ class DatabaseConnection:
 
         conditions = []
         for key, values in where_condition_dict.items():
-            # Check if the values are of string type
             if isinstance(values, str):
                 values = [values]
-            # Check if the values are of integer type
             elif isinstance(values, int):
                 values = [str(values)]
-            # Check if the values are a pandas Series
             elif isinstance(values, pd.Series):
                 values = values.tolist()
             else:
@@ -100,13 +97,10 @@ class DatabaseConnection:
 
         conditions = []
         for key, values in where_condition_dict.items():
-            # Check if the values are of string type
             if isinstance(values, str):
                 values = [values]
-            # Check if the values are of integer type
             elif isinstance(values, int):
                 values = [str(values)]
-            # Check if the values are a pandas Series
             elif isinstance(values, pd.Series):
                 values = values.tolist()
             else:

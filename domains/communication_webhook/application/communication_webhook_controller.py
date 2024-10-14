@@ -78,8 +78,6 @@ def handle_user_query(params):
             "query_text": "*Query:* " + text,
         },
     )
-
-    # Create and start a new thread
     query_thread = threading.Thread(
         target=process_user_query,
         args=(text, user_id, team_id, channel_id, trigger_id)
@@ -91,10 +89,8 @@ def handle_user_query(params):
 
 def process_user_query(text, user_id, team_id, channel_id, trigger_id):
     try:
-        # Log the processing of the query
         logger.info(f"Processing query for user_id: {user_id}, text: {text}")
         facade = CommunicationWebhook()
-        # Call your facade method to process the query
         workflow_id = facade.process_user_query(
             text=text,
             user_id=user_id,
@@ -102,13 +98,11 @@ def process_user_query(text, user_id, team_id, channel_id, trigger_id):
             channel_id=channel_id,
             trigger_id=trigger_id
         )
-        # Log successful processing
         logger.info(f"Successfully processed query for user_id: {user_id}")
         if workflow_id is None:
             return
         ServiceInvokeClient().invoke_query_flow_manager(workflow_id, text)
     except Exception as e:
-        # Log any errors that occur during processing
         logger.error(f"Error processing query for user_id: {user_id}, error: {e}", exc_info=True)
 
 
@@ -130,8 +124,6 @@ def invoke_slack_function_by_event_type(event, params):
         )
         return {"statusCode": 403, "body": "Invalid request"}
 
-    # x-slack-retry-num header is sent by slack when it retries the request
-    # We don't want to process the request again if it is a retry
     if (
             event.get("headers", {}).get(
                 "x-slack-retry-num", event.get("headers", {}).get("X-Slack-Retry-Num", None)

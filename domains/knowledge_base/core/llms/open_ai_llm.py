@@ -26,7 +26,6 @@ class OpenAILLM(llm.LLMInterface):
         )
         formatted_prompt = prompt.format(categories=", ".join(constants.constants.CATEGORIES), text=text)
 
-        # Get the response from the LLM
         response = self.llm(formatted_prompt)
         return response
 

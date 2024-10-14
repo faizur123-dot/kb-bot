@@ -23,7 +23,6 @@ class KBApi:
             raise err
 
     def send_message_to_user(self, workflow_id: int, slack_message_detail: dict, response: str):
-        # Construct the payload based on the parameters
         payload = {
             "workflow_id": int(workflow_id),
             "question": slack_message_detail.get(SLACK_MESSAGE_TEXT),
@@ -32,14 +31,11 @@ class KBApi:
             "answer": response
         }
 
-        # Define the endpoint
         endpoint = f"{self.base_url}/slack/respond"
 
         try:
-            # Make the POST request
             response = requests.post(endpoint, json=payload)
 
-            # Check if the request was successful
             if response.status_code == 200:
                 logger.info("Message sent successfully!")
             else:
@@ -55,14 +51,10 @@ class KBApi:
             "bug_message_text": question
         }
 
-        # Define the endpoint
         endpoint = f"{self.base_url}/knowledgebase/category"
 
         try:
-            # Make the POST request
             response = requests.get(endpoint, params=payload)
-
-            # Check if the request was successful
             if response.status_code == 200:
                 logger.info("Message sent successfully!")
             else:
@@ -82,10 +74,8 @@ class KBApi:
         }
         endpoint = f"{self.base_url}/ticket/assign"
         try:
-            # Make the POST request
             response = requests.post(endpoint, json=payload)
 
-            # Check if the request was successful
             if response.status_code == 200:
                 logger.info("Message sent successfully!")
             else:
@@ -102,10 +92,7 @@ class KBApi:
         }
         endpoint = f"{self.base_url}/process"
         try:
-            # Make the POST request
             response = requests.post(endpoint, json=payload)
-
-            # Check if the request was successful
             if response.status_code == 200:
                 logger.info("Message sent successfully!")
             else:

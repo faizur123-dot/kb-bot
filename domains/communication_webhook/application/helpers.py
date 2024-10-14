@@ -7,16 +7,13 @@ from infrastructure.slack_client import SlackClientImpl
 
 def get_event_params(content_type, body):
     if content_type == "application/json":
-        # parse json
         params = json.loads(body)
         return params
 
     elif content_type == "application/x-www-form-urlencoded":
-        # parse key value pairs
         params = {}
         for param in body.split("&"):
             key, value = param.split("=")
-            # urlDecode the value
             value = unquote(value)
             params[key] = value
 
@@ -60,7 +57,6 @@ def validate_slack_request(event):
         body=body, timestamp=timestamp, signature=signature
     )
 
-    # Verify the signature of this request
     if not is_valid:
         raise MyError(error_code=403, error_message="invalid slack request")
 

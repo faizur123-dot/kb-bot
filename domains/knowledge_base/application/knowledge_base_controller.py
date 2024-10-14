@@ -62,7 +62,6 @@ def categorise_bug(params):
     return facade.categorise_bug(bug_message_text)
 
 
-# REVIEW IS INSTANCE REMOVE
 def invoke_function_by_key(key, params):
     try:
         function = key_to_function_map.get(key, None)

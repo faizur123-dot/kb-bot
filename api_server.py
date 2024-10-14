@@ -12,22 +12,6 @@ from utils.logger import logger
 
 app = FastAPI()
 
-# components = {
-# }
-#
-# for component_name in components.keys():
-#     logger.info(f"Initializing the {component_name}")
-#     try:
-#         components[component_name]()
-#     except Exception as e:
-#         logger.error(
-#             f"Error in initializing the {component_name} : " + str(e), exc_info=True
-#         )
-#         raise Exception(f"Error in initializing the {component_name} : " + str(e))
-#     logger.info(f"Initialized the {component_name}")
-#
-# logger.info("Server initialized successfully")
-
 ALLOWED_ORIGINS = [
     "http://localhost:8080",
 ]

@@ -48,7 +48,6 @@ class ServiceInvokeClient(ServiceInvokeClientInterface):
             "workflow_id": workflow_id,
             "bug_message_text": question_text
         }
-        # response = self.kb_api_invoker.categorise_bug(workflow_id, question_text)
         response = self.service_invoker.invoke_local_function(categorise_bug, function_inputs)
         if response.status_code == 200:
             return response.body.get("answer")

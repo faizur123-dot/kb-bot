@@ -16,7 +16,6 @@ class LocalServiceConnector:
             MyError: if the function cannot be invoked
         """
         try:
-            # Invoking the local function with the provided input
             return function(function_input)
         except Exception as e:
             raise MyError(error_code=500, error_message=f"Error invoking function: {str(e)}")

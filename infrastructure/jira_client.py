@@ -39,7 +39,7 @@ class JiraClient:
             'project': {'key': project_key},
             'summary': bug_summary,
             'issuetype': {'name': JiraIssueCategory.bug.value},
-            'labels': [bug_category]  # Add bug_category to the labels
+            'labels': [bug_category]
         }
         new_issue = self.jira_client.create_issue(fields=issue_dict)
         if user_name is not None:

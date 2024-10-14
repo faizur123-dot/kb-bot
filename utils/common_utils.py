@@ -47,10 +47,8 @@ def update_json_variables(input_json, variable_map):
                 update_json_variables(input_json[key], variable_map)
             elif isinstance(input_json[key], str) and re.search("__", input_json[key]):
                 variable_name = input_json[key]
-                # Sanitize variable name
                 variable_name = variable_name.replace("__", "")
 
-                # Lowercase
                 variable_name = variable_name.lower()
 
                 variable = variable_map.get(variable_name, None)

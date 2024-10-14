@@ -1,7 +1,6 @@
 import json
 from urllib.parse import unquote
 from utils.exception import MyError
-import os
 from infrastructure.slack_client import SlackClientImpl
 
 

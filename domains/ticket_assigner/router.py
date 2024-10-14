@@ -14,7 +14,7 @@ router = APIRouter(
 @router.post("/assign")
 async def assign_ticket(request: Request):
     set_req_id(common_utils.get_unique_id())
-    logger.info("assigining ticket")
+    logger.info("assigning ticket")
 
     body = await request.json()
 

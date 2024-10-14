@@ -129,6 +129,7 @@ def all_workflow(website_base_url: str):
     article_links = get_article_links_for_all_cat_urls(cat_links)
     get_paragraphs_for_all_article_links(article_links)
 
+
 if __name__ == "__main__":
     base_url = "https://help.regie.ai"
     all_workflow(base_url)

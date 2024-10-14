@@ -1,6 +1,6 @@
-import constants.constants
+
 from constants.constants import CHUNK_SIZE, CHUNK_OVERLAP, EMBEDDED_TEXT, SRC, SRC_TEXT
-from domains.knowledge_base.core.ports.incoming.knowledge_base import KnowledgeBase as KBInterace
+from domains.knowledge_base.core.ports.incoming.knowledge_base import KnowledgeBase as KBInterface
 from domains.knowledge_base.domain_infrastructure.file_handler import fetch_file
 from domains.knowledge_base.core.document_loaders.text_document_loader import TextDocumentLoader
 from domains.knowledge_base.core.llms.open_ai_llm import OpenAILLM
@@ -11,7 +11,7 @@ from domains.knowledge_base.domain_infrastructure.db_client_impl import DBClient
 from domains.knowledge_base.domain_infrastructure.file_handler import convert_src_text_to_txt_file
 
 
-class KnowledgeBaseFacade(KBInterace):
+class KnowledgeBaseFacade(KBInterface):
 
     def __init__(self, workflow_id: int = None):
         self.workflow_id = workflow_id

@@ -7,24 +7,25 @@ from domains.knowledge_base.core.llms.open_ai_llm import OpenAILLM
 from domains.knowledge_base.core.text_splitters.recursive_text_splitter import RecursiveTextSplitter
 from domains.knowledge_base.domain_infrastructure.vector_store_client_impl import VectorStoreClientImpl
 from domains.knowledge_base.core import helpers
-from utils.common_utils import get_unique_id
 from domains.knowledge_base.domain_infrastructure.db_client_impl import DBClient
+from domains.knowledge_base.domain_infrastructure.file_handler import convert_src_text_to_txt_file
 
 
 class KnowledgeBaseFacade(KBInterace):
 
-    def __init__(self, workflow_id: int):
+    def __init__(self, workflow_id: int = None):
         self.workflow_id = workflow_id
         self.document_loader = TextDocumentLoader()
         self.text_splitter = RecursiveTextSplitter(CHUNK_SIZE, CHUNK_OVERLAP)
         self.vector_store = VectorStoreClientImpl()
         self.llm = OpenAILLM()
         self.db_client = DBClient()
-        self.db_client.update_kb_workflow_status_current_state(self.workflow_id)
+        if workflow_id is not None:
+            self.db_client.update_kb_workflow_status_current_state(self.workflow_id)
 
     def add_data_to_knowledge_base(self, source: str, src_filepath: str = None, bug_resolution_data=None):
         if bug_resolution_data is not None:
-            text_file = self._convert_src_text_to_txt_file(bug_resolution_data)
+            text_file = convert_src_text_to_txt_file(bug_resolution_data)
         else:
             text_file = self._fetch_text_file(src_filepath)
         loaded_documents = self.document_loader.load_data_into_documents(text_file)
@@ -32,14 +33,6 @@ class KnowledgeBaseFacade(KBInterace):
         list_of_documents: [] = self._create_documents(split_text_documents, source)
         self.vector_store.add_docs_to_vector_db(list_of_documents)
         return
-
-    @staticmethod
-    def _convert_src_text_to_txt_file(src_text: str):
-        file_path = f"{constants.constants.FILE_PERSIST_LOCATION}" + f"{get_unique_id()}.txt"
-        with open(file_path, "w") as txt_file:
-            txt_file.write(src_text)
-
-        return file_path
 
     @staticmethod
     def _fetch_text_file(src_filepath: str):

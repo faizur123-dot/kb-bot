@@ -13,11 +13,6 @@ def add_data_to_knowledge_base(params):
     src_filepath = params.get("src_filepath", None)
     bug_resolution_data = params.get("bug_resolution_data", None)
     source = params.get("source", None)
-    if workflow_id in (None, ""):
-        raise custom_exception.MyError(
-            error_code=422,
-            error_message="workflow_id not provided in request. It is required for every request.",
-        )
     if src_filepath in (None, "") and bug_resolution_data in (None, ""):
         raise custom_exception.MyError(
             error_code=422,

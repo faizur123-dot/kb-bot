@@ -1,0 +1,7 @@
+ID = "id"
+CREATED_AT = "created_at"
+CREATED_BY = "created_by"
+LAST_UPDATED_BY = "last_updated_by"
+LAST_UPDATED_AT = "last_updated_at"
+BUG_CATEGORY = "bug_category"
+DOMAIN_OWNER_USER_ID = "domain_owner_user_id"

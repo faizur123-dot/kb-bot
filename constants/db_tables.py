@@ -1,0 +1,8 @@
+LLM_RESPONSE_METADATA = "llm_response_metadata"
+MESSAGE_BUG_CATEGORY = "message_bug_category"
+JIRA_BUG_DETAILS = "jira_bug_details"
+SLACK_MESSAGE = "slack_message"
+KB_WORKFLOW = "kb_workflow"
+WORKFLOW_RESPONSE_TO_USER = "workflow_response_to_user"
+JIRA_BUG_CATEGORY_DOMAIN_OWNER = "jira_bug_category_domain_owner"
+USER_METADATA = "user_metadata"

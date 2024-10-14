@@ -50,7 +50,7 @@ class DBClient(DBClientInterface):
         except Exception as err:
             raise err
 
-    def get_slack_message_details(self, workflow_id: int):
+    def get_slack_message_details(self, workflow_id: int) -> dict:
         condition_dict = dict()
         condition_dict[slack_message_fields.WORKFLOW_ID] = [workflow_id]
         column_list = [

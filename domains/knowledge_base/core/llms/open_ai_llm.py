@@ -19,7 +19,7 @@ class OpenAILLM(llm.LLMInterface):
     def embed_query(self, query) -> List[float]:
         return get_embeddings().embed_query(query)
 
-    def categorise_bug(self, text):
+    def categorise_bug(self, text: str):
         prompt = PromptTemplate(
             input_variables=["categories", "text"],
             template=constants.constants.CATEGORISE_BUG_TEMPLATE,

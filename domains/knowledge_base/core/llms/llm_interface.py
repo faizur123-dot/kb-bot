@@ -1,9 +1,12 @@
+from typing import List
+
+
 class LLMInterface():
-    def get_embeddings(self):
+    def embed_query(self, query) -> List[float]:
         pass
 
-    def embed_query(self, query):
+    def answer_question(self, question: str) -> str:
         pass
 
-    def answer_question_using_text(self, question_asked, source_text):
+    def categorise_bug(self, text: str):
         pass

@@ -6,6 +6,8 @@ from constants.schema.slack_message_fields import SLACK_MESSAGE_TEXT, SLACK_MESS
 from domains.communication_webhook.application.communication_webhook_controller import send_response_to_user
 from domains.ticket_assigner.application.ticket_assigner_controller import assign_ticket_to_user
 from domains.query_flow_manager.core.ports.outgoing.local_service_client_interface import ServiceInvokeClientInterface
+from utils.response import MyResponse
+from utils.exception import MyError
 
 
 class ServiceInvokeClient(ServiceInvokeClientInterface):
@@ -22,7 +24,13 @@ class ServiceInvokeClient(ServiceInvokeClientInterface):
             "question": question
         }
         function_name = query_knowledge_base
-        return self.service_invoker.invoke_local_function(function_name, function_inputs)
+        response: MyResponse = self.service_invoker.invoke_local_function(function_name, function_inputs)
+        if response.status_code == 200:
+            return response.body.get("answer")
+        elif response.status_code == 404:
+            return None
+        else:
+            raise MyError(error_code=500, error_message="Didnt get expected response from KB")
 
     def send_message_to_user(self, workflow_id: int, slack_message_detail: dict, llm_response_data: str):
         payload = {
@@ -55,4 +63,7 @@ class ServiceInvokeClient(ServiceInvokeClientInterface):
         }
         response: MyResponse = self.service_invoker.invoke_local_function(assign_ticket_to_user, function_input=payload)
         if response.status_code == 200:
-            return response
+            ticket_link = response.body.get("ticket_link")
+            return ticket_link
+        else:
+            raise MyError(error_code=500, error_message="Bug was not raised")

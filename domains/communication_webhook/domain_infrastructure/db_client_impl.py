@@ -10,6 +10,7 @@ from utils.common_utils import encode_string
 from utils.common_utils import decode_string
 from utils.exception import MyError
 from domains.communication_webhook.core.ports.outgoing.db_client import DBClientInterface
+from typing import Optional
 
 
 class DBClient(DBClientInterface):
@@ -20,7 +21,7 @@ class DBClient(DBClientInterface):
     def __init__(self) -> None:
         self.db_connector = DatabaseConnection()
 
-    def create_workflow_for_the_trigger(self, slack_trigger_id: str):
+    def create_workflow_for_the_trigger(self, slack_trigger_id: str) -> int:
         existing_workflow_id = self._get_workflow_id_of_trigger(slack_trigger_id)
         if existing_workflow_id is None:
             data = []
@@ -42,7 +43,7 @@ class DBClient(DBClientInterface):
                 raise err
         return existing_workflow_id
 
-    def get_response_to_user_for_workflow(self, workflow_id):
+    def get_response_to_user_for_workflow(self, workflow_id) -> Optional[str]:
         condition_dict = dict()
         condition_dict[workflow_response_to_user_fields.WORKFLOW_ID] = [workflow_id]
         try:

@@ -19,15 +19,12 @@ class QueryFlowManager(QueryFlowManagerInterface):
     def process_message_received_from_slack(self, question: str):
         try:
             slack_message_detail: dict = self.db_client.get_slack_message_details(workflow_id=self.workflow_id)
-            response: MyResponse = self.service_invoker.query_knowledge_base(workflow_id=self.workflow_id,
-                                                                             question=question)
-            if response.status_code == 404:
+            data_received_from_llm: str = self.service_invoker.query_knowledge_base(workflow_id=self.workflow_id,
+                                                                                    question=question)
+            if data_received_from_llm is None:
                 response_to_user = self._process_no_response_from_llm(slack_message_detail, question)
-            elif response.status_code == 200:
-                llm_response_data = response.body.get("answer")
-                response_to_user = self._process_llm_service_response(llm_response_data, slack_message_detail)
             else:
-                raise MyError(error_code=500, error_message=f"Unable to get response from knowledge base")
+                response_to_user = self._process_llm_service_response(data_received_from_llm, slack_message_detail)
             self.db_client.upsert_response_data_for_workflow(workflow_id=self.workflow_id,
                                                              response_text=response_to_user)
         except Exception as err:
@@ -48,13 +45,9 @@ class QueryFlowManager(QueryFlowManagerInterface):
         return response_text_for_user
 
     def _process_bug_categorised(self, question: str, bug_category: str):
-        response: MyResponse = self.service_invoker.create_ticket(self.workflow_id,
-                                                                  question, bug_category)
-        if response.status_code == 200:
-            ticket_link = response.body.get("ticket_link")
-            return ticket_link
-        else:
-            raise MyError(error_code=500, error_message=f"Could not assign the bug")
+        ticket_link: str = self.service_invoker.create_ticket(self.workflow_id,
+                                                              question, bug_category)
+        return ticket_link
 
     @staticmethod
     def _process_jira_response(jira_ticket_link: str):

@@ -1,7 +1,7 @@
 from utils.exception import MyError
 
 
-class LocalServiceInvoker:
+class LocalServiceConnector:
 
     @staticmethod
     def invoke_local_function(function, function_input: dict):

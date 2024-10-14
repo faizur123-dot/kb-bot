@@ -38,7 +38,7 @@ class OpenAILLM(llm.LLMInterface):
         )
         response_metadata = qa.invoke(question)
         answer = response_metadata.get("result")
-        unsure_responses = ["I don't know", "I'm not sure", "I couldn't find information"]
+        unsure_responses = constants.constants.UNSURE_RESPONSES_LIST
         if any(phrase in answer for phrase in unsure_responses):
             return ""
         return answer

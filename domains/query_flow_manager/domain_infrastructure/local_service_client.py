@@ -1,5 +1,5 @@
 from domains.knowledge_base.application.knowledge_base_controller import query_knowledge_base, categorise_bug
-from infrastructure.local_service_invoker import LocalServiceInvoker
+from infrastructure.local_service_connector import LocalServiceConnector
 from infrastructure.kb_api_client import KBApi
 from utils.response import MyResponse
 from constants.schema.slack_message_fields import SLACK_MESSAGE_TEXT, SLACK_MESSAGE_USER_ID, SLACK_MESSAGE_CHANNEL_ID
@@ -11,7 +11,7 @@ from domains.query_flow_manager.core.ports.outgoing.local_service_client_interfa
 class ServiceInvokeClient(ServiceInvokeClientInterface):
 
     def __init__(self):
-        self.service_invoker = LocalServiceInvoker()
+        self.service_invoker = LocalServiceConnector()
         self.kb_api_invoker = KBApi()
 
     def query_knowledge_base(

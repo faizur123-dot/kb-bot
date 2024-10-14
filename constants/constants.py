@@ -34,3 +34,5 @@ PROJECT_KEY = "SCRUM"
 KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE = (
     "Your knowledge base response is ready! View message."
 )
+
+UNSURE_RESPONSES_LIST = ["I don't know", "I'm not sure", "I couldn't find information"]

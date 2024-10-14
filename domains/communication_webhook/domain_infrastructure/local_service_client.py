@@ -1,4 +1,4 @@
-from infrastructure.local_service_invoker import LocalServiceInvoker
+from infrastructure.local_service_connector import LocalServiceConnector
 from infrastructure.kb_api_client import KBApi
 from domains.communication_webhook.core.ports.outgoing.local_service_client_interface import \
     ServiceInvokeClientInterface
@@ -7,7 +7,7 @@ from domains.communication_webhook.core.ports.outgoing.local_service_client_inte
 class ServiceInvokeClient(ServiceInvokeClientInterface):
 
     def __init__(self):
-        self.service_invoker = LocalServiceInvoker()
+        self.service_invoker = LocalServiceConnector()
         self.kb_client = KBApi()
 
     def invoke_query_flow_manager(

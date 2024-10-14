@@ -5,7 +5,7 @@ from utils.response import MyResponse
 from constants.schema.slack_message_fields import SLACK_MESSAGE_TEXT, SLACK_MESSAGE_USER_ID, SLACK_MESSAGE_CHANNEL_ID
 from domains.communication_webhook.application.communication_webhook_controller import send_response_to_user
 from domains.ticket_assigner.application.ticket_assigner_controller import assign_ticket_to_user
-from domains.kb_workflow.core.ports.outgoing.local_service_client_interface import ServiceInvokeClientInterface
+from domains.query_flow_manager.core.ports.outgoing.local_service_client_interface import ServiceInvokeClientInterface
 
 
 class ServiceInvokeClient(ServiceInvokeClientInterface):
@@ -34,13 +34,6 @@ class ServiceInvokeClient(ServiceInvokeClientInterface):
         }
         function_name = send_response_to_user
         self.service_invoker.invoke_local_function(function_name, function_input=payload)
-
-    # def categorise_the_text_as_one_of_bugs(self, workflow_id: int, question_text: str):
-    #     response = self.kb_api_invoker.categorise_bug(workflow_id, question_text)
-    #     if response.status_code == 200:
-    #         return response.body.get("answer")
-    #     else:
-    #         return None
 
     def categorise_the_text_as_one_of_bugs(self, workflow_id: int, question_text: str):
         function_inputs = {

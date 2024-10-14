@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Response, HTTPException
 from utils.logger import logger, set_req_id
 from utils import common_utils
-from domains.kb_workflow.application.kb_workflow_controller import invoke_function_by_key
+from domains.query_flow_manager.application.query_flow_controller import invoke_function_by_key
 
 router = APIRouter(
     prefix="",

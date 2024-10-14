@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import domains.knowledge_base.router as knowledge_base_router
 import domains.ticket_assigner.router as ticket_assigner_router
 import domains.communication_webhook.router as communication_router
-import domains.kb_workflow.router as kb_workflow_router
+import domains.query_flow_manager.router as query_workflow_router
 from utils.logger import logger
 
 app = FastAPI()
@@ -43,7 +43,7 @@ app.add_middleware(
 app.include_router(knowledge_base_router.router)
 app.include_router(ticket_assigner_router.router)
 app.include_router(communication_router.router)
-app.include_router(kb_workflow_router.router)
+app.include_router(query_workflow_router.router)
 
 if __name__ == "__main__":
     port = os.environ.get("PORT", 8080)

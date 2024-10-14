@@ -9,7 +9,7 @@ from constants.schema import user_fields
 from utils.exception import MyError
 from constants.schema import workflow_response_to_user_fields
 from utils.common_utils import encode_string
-from domains.kb_workflow.core.ports.outgoing.db_client import DBClientInterface
+from domains.query_flow_manager.core.ports.outgoing.db_client import DBClientInterface
 
 
 class DBClient(DBClientInterface):

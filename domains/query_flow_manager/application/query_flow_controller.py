@@ -4,8 +4,7 @@ import utils.exception as custom_exception
 from utils.logger import logger
 from utils.exception import MyError
 from utils.response import MyResponse
-from domains.kb_workflow.core.kb_workflow_facade import KBWorkflow
-from domains.kb_workflow.domain_infrastructure.db_client_impl import DBClient
+from domains.query_flow_manager.core.query_flow_manager_facade import QueryFlowManager
 
 
 def process_slack_message(params):
@@ -16,7 +15,7 @@ def process_slack_message(params):
             error_code=422,
             error_message="workflow_id not provided in request. It is required for every request.",
         )
-    facade = KBWorkflow(workflow_id)
+    facade = QueryFlowManager(workflow_id)
     return facade.process_message_received_from_slack(question)
 
 

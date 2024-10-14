@@ -10,7 +10,7 @@ class ServiceInvokeClient(ServiceInvokeClientInterface):
         self.service_invoker = LocalServiceInvoker()
         self.kb_client = KBApi()
 
-    def invoke_kb_workflow(
+    def invoke_query_flow_manager(
             self, workflow_id: int, text: str
     ):
         return self.kb_client.process_slack_message_received(workflow_id=workflow_id, text=text)

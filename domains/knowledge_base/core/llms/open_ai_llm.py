@@ -31,16 +31,12 @@ class OpenAILLM(llm.LLMInterface):
         return response
 
     def answer_question(self, question: str) -> str:
-        prompt_template = (
-            constants.constants.KB_QUERY_TEMPLATE
-        )
-        formatted_prompt = prompt_template.format(question=question)
         qa = RetrievalQA.from_chain_type(
             llm=self.llm,
             chain_type="stuff",
             retriever=self.retrieve.as_retriever()
         )
-        response_metadata = qa.invoke(formatted_prompt)
+        response_metadata = qa.invoke(question)
         answer = response_metadata.get("result")
         unsure_responses = ["I don't know", "I'm not sure", "I couldn't find information"]
         if any(phrase in answer for phrase in unsure_responses):

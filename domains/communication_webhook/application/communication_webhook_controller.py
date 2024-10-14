@@ -112,7 +112,7 @@ def process_user_query(text, user_id, team_id, channel_id, trigger_id):
         logger.info(f"Successfully processed query for user_id: {user_id}")
         if workflow_id is None:
             return
-        ServiceInvokeClient().invoke_kb_workflow(workflow_id, text)
+        ServiceInvokeClient().invoke_query_flow_manager(workflow_id, text)
     except Exception as e:
         # Log any errors that occur during processing
         logger.error(f"Error processing query for user_id: {user_id}, error: {e}")

@@ -33,9 +33,6 @@ def validate_slack_request(event):
     Raises:
         MyError: if the Slack request cannot be validated
     """
-    environment = os.environ.get("ENVIRONMENT", "local")
-    if environment == "dev":
-        return
 
     body = event.get("body", None)
     if body is None:

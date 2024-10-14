@@ -1,4 +1,4 @@
-import infrastructure.postgres_connector as raw_db_connector
+import infrastructure.postgres_connector as db_connector
 from domains.knowledge_base.core.ports.outgoing.db_client_interface import DBInterface
 from utils.common_utils import encode_string
 from constants import db_tables
@@ -14,7 +14,7 @@ class DBClient(DBInterface):
     """
 
     def __init__(self) -> None:
-        self.raw_db_connector = raw_db_connector.DatabaseConnection()
+        self.db_connector = db_connector.DatabaseConnection()
 
     def add_kb_response(self, workflow_id: int, answer: str):
         encoded_answer = encode_string(answer)
@@ -26,7 +26,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.raw_db_connector.upsert_row_into_table(
+            self.db_connector.upsert_row_into_table(
                 db_tables.LLM_RESPONSE_METADATA, data, [llm_response_metadata_fields.WORKFLOW_ID]
             )
         except Exception as err:
@@ -41,7 +41,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.raw_db_connector.upsert_row_into_table(
+            self.db_connector.upsert_row_into_table(
                 db_tables.MESSAGE_BUG_CATEGORY, data, [llm_response_metadata_fields.WORKFLOW_ID]
             )
         except Exception as err:
@@ -56,7 +56,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.raw_db_connector.upsert_row_into_table(
+            self.db_connector.upsert_row_into_table(
                 db_tables.KB_WORKFLOW, data, [kb_workflow_fields.WORKFLOW_ID]
             )
         except Exception as err:

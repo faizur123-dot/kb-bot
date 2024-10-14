@@ -1,4 +1,4 @@
-import infrastructure.postgres_connector as raw_db_connector
+import infrastructure.postgres_connector as db_connector
 from domains.ticket_assigner.core.ports.outgoing.db_client_interface import DBInterface
 from constants import db_tables
 from constants.schema import jira_bug_details_fields
@@ -12,7 +12,7 @@ class DBClient(DBInterface):
     """
 
     def __init__(self) -> None:
-        self.raw_db_connector = raw_db_connector.DatabaseConnection()
+        self.db_connector = db_connector.DatabaseConnection()
 
     def add_jira_bug_detail(self, workflow_id: int, ticket_link: str, user_name: str = None):
         data = []
@@ -25,7 +25,7 @@ class DBClient(DBInterface):
             insertion_data[jira_bug_details_fields.ASSIGNEE_USER_NAME] = user_name
         data.append(insertion_data)
         try:
-            self.raw_db_connector.upsert_row_into_table(
+            self.db_connector.upsert_row_into_table(
                 db_tables.JIRA_BUG_DETAILS, data, [jira_bug_details_fields.WORKFLOW_ID]
             )
         except Exception as err:
@@ -40,7 +40,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.raw_db_connector.upsert_row_into_table(
+            self.db_connector.upsert_row_into_table(
                 db_tables.KB_WORKFLOW, data, [kb_workflow_fields.WORKFLOW_ID]
             )
         except Exception as err:

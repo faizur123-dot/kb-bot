@@ -115,7 +115,7 @@ def process_user_query(text, user_id, team_id, channel_id, trigger_id):
         ServiceInvokeClient().invoke_query_flow_manager(workflow_id, text)
     except Exception as e:
         # Log any errors that occur during processing
-        logger.error(f"Error processing query for user_id: {user_id}, error: {e}")
+        logger.error(f"Error processing query for user_id: {user_id}, error: {e}", exc_info=True)
 
 
 def invoke_slack_function_by_event_type(event, params):
@@ -221,11 +221,11 @@ def invoke_function_by_key(key, params):
                         },
                     }
             except MyError as err:
-                logger.error(f"Error in {key} : {err.error_message}")
+                logger.error(f"Error in {key} : {err.error_message}", exc_info=True)
                 if err.error_code >= 500:
                     raise err
             except Exception as err:
-                logger.error(f"Error in {key} : {err}")
+                logger.error(f"Error in {key} : {err}", exc_info=True)
                 raise err
         else:
             err = {

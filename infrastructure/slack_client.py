@@ -2,12 +2,16 @@ from slack_bolt import App
 import os
 from slack_sdk.signature import SignatureVerifier
 import json
+from utils.exception import MyError
 
 
 class SlackClientImpl:
     def __init__(self, bot_token=None):
         if bot_token is None:
-            bot_token = os.environ.get("WORKSPACE_BOT_TOKEN")
+            workspace_bot_token = os.environ.get("WORKSPACE_BOT_TOKEN")
+            if not workspace_bot_token:
+                raise MyError(error_code=500, error_message=f"Workspace bot token not given")
+            bot_token = workspace_bot_token
         self.bot_token = bot_token
         self.app = App(
             token=bot_token,

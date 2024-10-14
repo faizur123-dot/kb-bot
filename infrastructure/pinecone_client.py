@@ -1,12 +1,16 @@
 from pinecone import Pinecone
 from utils.logger import logger
 import os
+from utils.exception import MyError
 
 
 class PineConeClient:
 
     def __init__(self, index: str):
-        self.client = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
+        self.pinecone_api_key = os.environ.get("PINECONE_API_KEY")
+        if self.pinecone_api_key is None:
+            raise MyError(error_code=500, error_message="PINECONE_API_KEY not set.")
+        self.client = Pinecone(api_key=self.pinecone_api_key)
         self.index = self.client.Index(index)
 
     def insert_documents(self, embedded_documents: []):

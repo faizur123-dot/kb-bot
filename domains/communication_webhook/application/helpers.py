@@ -23,32 +23,6 @@ def get_event_params(content_type, body):
         return params
 
 
-def get_event_type(params):
-    """
-    Method to get the event type
-
-    Args:
-        params (dict): The event params
-
-    Returns:
-        str: The event type
-
-    Raises:
-        MyError: if the event type cannot be retrieved
-    """
-    if "event" in params:
-        event = params["event"]
-        if "type" in event:
-            event_type = event["type"]
-            if event["type"] == "message":
-                if "channel_type" in event:
-                    event_type = event_type + ":" + event["channel_type"]
-                if "subtype" in event:
-                    event_type = event_type + ":" + event["subtype"]
-            return event_type
-    return None
-
-
 def validate_slack_request(event):
     """
     Method to validate the Slack request
@@ -112,10 +86,6 @@ def get_slack_operation_type(params):
     if "command" in params:
         slack_operation_type = "slash_command"
     return slack_operation_type
-
-
-def create_slack_message_block(self):
-    pass
 
 
 def get_command(params):

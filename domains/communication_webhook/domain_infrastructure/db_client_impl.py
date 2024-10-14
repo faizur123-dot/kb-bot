@@ -1,4 +1,3 @@
-import pandas as pd
 from constants.schema import workflow_response_to_user_fields
 from infrastructure.postgres_connector import DatabaseConnection
 from constants.schema import kb_workflow_fields

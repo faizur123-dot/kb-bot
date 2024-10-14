@@ -40,12 +40,6 @@ def validate_send_response_to_user(params):
         raise Exception("answer is missing")
 
 
-def validate_get_slack_message_detail_request(params):
-    workflow_id = params.get("workflow_id", None)
-    if workflow_id is None:
-        raise Exception("workflow_id is missing")
-
-
 def send_response_to_user(params):
     try:
         validate_send_response_to_user(params)

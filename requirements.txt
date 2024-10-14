@@ -12,3 +12,5 @@ langchain-community ==0.3.2
 psycopg2_binary==2.9.6
 jira==3.8.0
 slack-bolt==1.18.0
+selenium == 4.25.0
+bs4== 0.0.2

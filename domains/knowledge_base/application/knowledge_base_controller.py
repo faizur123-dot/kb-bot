@@ -21,7 +21,7 @@ def add_data_to_knowledge_base(params):
     if src_filepath in (None, "") and bug_resolution_data in (None, ""):
         raise custom_exception.MyError(
             error_code=422,
-            error_message="src filepath or bug_resolution_data not provided in request. either is required for every request"
+            error_message="src filepath or bug_resolution_data not provided in request. either of two is required for every request"
         )
     if source in (None, ""):
         raise custom_exception.MyError(

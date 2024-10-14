@@ -3,7 +3,8 @@ from domains.communication_webhook.domain_infrastructure.db_client_impl import D
 from utils.common_utils import update_json_variables, get_json_from_path
 from domains.communication_webhook.domain_infrastructure.slack_client import SlackClientImpl
 from constants.constants import KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE
-from domains.communication_webhook.core.ports.incoming.communication_webhook import CommunicationWebhookInterface as CommWebhookInterface
+from domains.communication_webhook.core.ports.incoming.communication_webhook import \
+    CommunicationWebhookInterface as CommWebhookInterface
 
 
 class CommunicationWebhook(CommWebhookInterface):

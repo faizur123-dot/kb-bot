@@ -7,6 +7,7 @@ import os
 class DatabaseConnection:
 
     def __init__(self):
+        self.connection = None
         self.host = os.getenv("POSTGRES_RDS_HOST")
         self.database = os.getenv("POSTGRES_RDS_DATABASE")
         self.password = os.getenv("POSTGRES_RDS_PASSWORD")

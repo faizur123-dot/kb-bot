@@ -1,17 +1,10 @@
 PINECONE_INDEX = "regie-ai-interview"
-FILE_FORMAT_PARQUET = "PARQUET"
-FILE_FORMAT_CSV = "CSV"
-FILE_FORMAT_JSON = "JSON"
 LOCAL_ENVIRONMENT = "local"
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 20
 EMBEDDED_TEXT = "embedded_text"
-SRC_CREATION_TIME = "src_creation_time"
 SRC_TEXT = "source_text"
-TENANT_ID = "tenant_id"
 SRC = "source"
-SRC_ID = "source_id"
-PARENT_SOURCE_ID = 'parent_source_id'
 SRC_TEXT_CHECKSUM = 'src_text_checksum'
 POSTGRES_PORT = 5432
 POSTGRES_USER = "postgres"

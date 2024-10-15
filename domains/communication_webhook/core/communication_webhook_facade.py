@@ -1,7 +1,7 @@
 import json
 from domains.communication_webhook.domain_infrastructure.db_client_impl import DBClient
 from utils.common_utils import update_json_variables, get_json_from_path
-from domains.communication_webhook.domain_infrastructure.slack_client import SlackClientImpl
+from domains.communication_webhook.domain_infrastructure.slack_client import SlackClient
 from constants.constants import KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE
 from domains.communication_webhook.core.ports.incoming.communication_webhook import \
     CommunicationWebhookInterface as CommWebhookInterface
@@ -11,7 +11,7 @@ class CommunicationWebhook(CommWebhookInterface):
 
     def __init__(self, workflow_id=None):
         self.db_client = DBClient()
-        self.slack_client = SlackClientImpl()
+        self.slack_client = SlackClient()
         if workflow_id is not None:
             self.db_client.update_kb_workflow_status_current_state(workflow_id)
 
@@ -39,7 +39,8 @@ class CommunicationWebhook(CommWebhookInterface):
         )
         json_list = json.dumps(forward_blocks, indent=2)
 
-        self.slack_client.post_ephemeral_message(channel=channel_id, message=KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE,
-                                                 blocks=json_list,
-                                                 user=user_id)
+        self.slack_client.post_private_message_to_user(channel=channel_id,
+                                                       message=KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE,
+                                                       blocks=json_list,
+                                                       user=user_id)
         return

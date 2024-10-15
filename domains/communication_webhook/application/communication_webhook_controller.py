@@ -10,7 +10,6 @@ import json
 from utils.exception import MyError
 import threading
 from domains.communication_webhook.domain_infrastructure.local_service_client import ServiceInvokeClient
-from domains.communication_webhook.domain_infrastructure.db_client_impl import DBClient
 
 
 def validate_process_user_query(params):
@@ -51,7 +50,6 @@ def send_response_to_user(params):
         channel_id = params.get("channel_id", None)
         facade = CommunicationWebhook(workflow_id)
         facade.send_response_to_user(question, answer, channel_id, user_id)
-        DBClient().mark_workflow_status_as_success(workflow_id=workflow_id)
     except Exception as err:
         raise MyError(error_code=500, error_message=f"Unable to send response to user: {err}")
 

@@ -12,6 +12,7 @@ class CommunicationWebhook(CommWebhookInterface):
     def __init__(self, workflow_id=None):
         self.db_client = DBClient()
         self.slack_client = SlackClient()
+        self.workflow_id = workflow_id
         if workflow_id is not None:
             self.db_client.update_kb_workflow_status_current_state(workflow_id)
 
@@ -43,4 +44,5 @@ class CommunicationWebhook(CommWebhookInterface):
                                                        message=KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE,
                                                        blocks=json_list,
                                                        user=user_id)
+        self.db_client.mark_workflow_status_as_success(workflow_id=self.workflow_id)
         return

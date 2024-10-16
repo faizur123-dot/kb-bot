@@ -39,7 +39,7 @@ class SlackClientImpl:
                 channel=channel,
                 user=user,
                 text=message,
-                blocks=json.dumps(blocks),
+                blocks=blocks,
                 thread_ts=thread_ts,
             )
         else:

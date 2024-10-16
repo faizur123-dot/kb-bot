@@ -4,6 +4,8 @@ from constants import constants
 from utils.exception import MyError
 from constants.jira_issue_category_enum import JiraIssueCategory
 from jira import JIRA
+from utils.logger import logger
+from jira.exceptions import JIRAError
 
 
 class JiraClient:
@@ -41,8 +43,13 @@ class JiraClient:
             'issuetype': {'name': JiraIssueCategory.bug.value},
             'labels': [bug_category]
         }
-        new_issue = self.jira_client.create_issue(fields=issue_dict)
-        if user_name is not None:
-            self.jira_client.assign_issue(new_issue.key, user_name)
-        issue_url = f"{self.jira_server}/browse/{new_issue.key}"
-        return issue_url
+        try:
+            new_issue = self.jira_client.create_issue(fields=issue_dict)
+            if user_name is not None:
+                self.jira_client.assign_issue(new_issue.key, user_name)
+            issue_url = f"{self.jira_server}/browse/{new_issue.key}"
+            return issue_url
+        except JIRAError as err:
+            logger.error(f"Could not create jira ticket: {err.response.text}")
+            raise MyError(error_code=500, error_message=f"Failed to create JIRA issue: {err.response.text}")
+

@@ -42,7 +42,7 @@ class DBClient(DBClientInterface):
                 raise err
         return existing_workflow_id
 
-    def get_response_to_user_for_workflow(self, workflow_id) -> Optional[str]:
+    def get_response_to_user_for_workflow(self, workflow_id: int) -> Optional[str]:
         condition_dict = dict()
         condition_dict[workflow_response_to_user_fields.WORKFLOW_ID] = [workflow_id]
         try:
@@ -91,7 +91,7 @@ class DBClient(DBClientInterface):
         except Exception as err:
             raise err
 
-    def mark_workflow_status_as_success(self, workflow_id):
+    def mark_workflow_status_as_success(self, workflow_id: int):
         condition_dict = dict()
         condition_dict[kb_workflow_fields.WORKFLOW_ID] = [workflow_id]
         data = {

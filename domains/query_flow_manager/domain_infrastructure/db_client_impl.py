@@ -37,7 +37,7 @@ class DBClient(DBClientInterface):
         except Exception as err:
             raise err
 
-    def update_kb_workflow_status(self, workflow_id: int, current_status):
+    def update_kb_workflow_status(self, workflow_id: int, current_status: str):
         condition_dict = dict()
         condition_dict[kb_workflow_fields.WORKFLOW_ID] = [workflow_id]
         data = {
@@ -79,7 +79,7 @@ class DBClient(DBClientInterface):
         except Exception as err:
             raise err
 
-    def get_jira_user_name_of_bug_category(self, bug_category):
+    def get_jira_user_name_of_bug_category(self, bug_category: str):
         user_id = self._get_domain_owner_user_id_for_the_bug_category(bug_category)
         jira_user_name = self._get_jira_user_name_for_user_id(user_id)
         return jira_user_name

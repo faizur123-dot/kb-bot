@@ -66,7 +66,14 @@ def get_slack_event_type(params):
         if "type" in event:
             event_type = event["type"]
             if event["type"] == "message":
-                return event_type
+                if "client_msg_id" not in event:
+                    event_type = event_type + ":" + "bot"
+                    return event_type
+                elif "thread_ts" in event:
+                    event_type = event_type + ":" + "thread"
+                    return event_type
+                else:
+                    return event_type + ":" + "parent"
     return None
 
 

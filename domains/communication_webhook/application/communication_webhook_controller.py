@@ -82,8 +82,34 @@ def handle_incoming_webhook_message(params):
         message_ts = str(message_ts)
     channel_id = params.get("channel", None)
     trigger_id = params.get("client_msg_id", " ")
-    process_user_query(text=text, team_id=team_id, user_id=user_id, ts=message_ts, channel_id=channel_id,
-                       trigger_id=trigger_id)
+    query_thread = threading.Thread(
+        target=process_user_query,
+        args=(text, user_id, team_id, channel_id, trigger_id),
+        kwargs={"ts": message_ts}
+    )
+    query_thread.start()
+
+    response = {
+        "statusCode": 200,
+        "body": "ok"
+    }
+    return response
+
+
+def handle_thread_webhook_message(params):
+    response = {
+        "statusCode": 200,
+        "body": "ok"
+    }
+    return response
+
+
+def handle_bot_webhook_message(params):
+    response = {
+        "statusCode": 200,
+        "body": "ok"
+    }
+    return response
 
 
 def handle_user_query(params):
@@ -194,6 +220,7 @@ def invoke_slack_function_by_event_type(event, params):
                     "body": response,
                     "headers": {
                         "Content-Type": "application/json",
+                        "x-slack-no-retry": 1
                     },
                 }
             except Exception as err:
@@ -281,5 +308,7 @@ action_to_function_map = {
     "/ask": handle_user_query,
     "respond_answer_to_user": send_response_to_user,
     "url_verification": url_verification,
-    "message": handle_incoming_webhook_message
+    "message:parent": handle_incoming_webhook_message,
+    "message:thread": handle_thread_webhook_message,
+    "message:bot": handle_bot_webhook_message
 }

@@ -36,22 +36,22 @@ class CommunicationWebhook(CommWebhookInterface):
             raise err
 
     def send_response_to_user(self, question: str, answer: str, channel_id: str, user_id: str, thread_ts=None):
+        knowledge_base_response_json = get_json_from_path(
+            "constants/query_response.json"
+        )
+
+        variable_map = {"question": question, "answer": answer}
+        forward_blocks = update_json_variables(
+            knowledge_base_response_json, variable_map
+        )
+        json_list = json.dumps(forward_blocks, indent=2)
         if thread_ts is None:
-            knowledge_base_response_json = get_json_from_path(
-                "constants/query_response.json"
-            )
-
-            variable_map = {"question": question, "answer": answer}
-            forward_blocks = update_json_variables(
-                knowledge_base_response_json, variable_map
-            )
-            json_list = json.dumps(forward_blocks, indent=2)
-
             self.communication_client.post_private_message_to_user(channel=channel_id,
                                                                    message=KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE,
                                                                    blocks=json_list,
                                                                    user=user_id)
         else:
-            self.communication_client.post_thread_message(channel=channel_id, message=answer, thread_ts=thread_ts)
+            self.communication_client.post_thread_message(channel=channel_id, message=answer,
+                                                          thread_ts=thread_ts)
         self.db_client.mark_workflow_status_as_success(workflow_id=self.workflow_id)
         return

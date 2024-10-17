@@ -109,6 +109,10 @@ def invoke_slack_function_by_event_type(event, params):
     This function invokes the slack function based on the event type
     """
 
+    if params.get("ssl_check", None) is not None:
+        logger.info("SSL check request acknowledged")
+        return {"statusCode": 200, "body": "OK"}
+
     try:
         validate_slack_request(event)
     except Exception as e:

@@ -1,7 +1,6 @@
 import os
 from utils.logger import logger
 from utils.exception import MyError
-from constants.schema.slack_message_fields import SLACK_MESSAGE_TEXT, SLACK_MESSAGE_USER_ID, SLACK_MESSAGE_CHANNEL_ID
 import requests
 
 

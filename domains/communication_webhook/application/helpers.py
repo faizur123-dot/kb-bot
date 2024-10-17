@@ -20,16 +20,6 @@ def get_event_params(content_type, body):
 
 
 def validate_slack_request(event):
-    """
-    Method to validate the Slack request
-
-    Args:
-        event (dict): The event object
-
-    Raises:
-        MyError: if the Slack request cannot be validated
-    """
-
     body = event.get("body", None)
     if body is None:
         raise MyError(error_code=403, error_message="body is missing")
@@ -61,38 +51,26 @@ def validate_slack_request(event):
 
 
 def get_slack_operation_type(params):
-    """
-    Method to get the slack operation type
-
-    Args:
-        params (dict): The event params
-
-    Returns:
-        str: The slack operation type
-
-    Raises:
-        MyError: if the slack operation type cannot be retrieved
-    """
-
-    slack_operation_type = None
+    slack_operation_type = "event"
     if "command" in params:
         slack_operation_type = "slash_command"
+    if "type" in params:
+        if params["type"] == "url_verification":
+            slack_operation_type = "url_verification"
     return slack_operation_type
 
 
+def get_slack_event_type(params):
+    if "event" in params:
+        event = params["event"]
+        if "type" in event:
+            event_type = event["type"]
+            if event["type"] == "message":
+                return event_type
+    return None
+
+
 def get_command(params):
-    """
-    Method to get the command
-
-    Args:
-        params (dict): The event params
-
-    Returns:
-        str: The command
-
-    Raises:
-        MyError: if the command cannot be retrieved
-    """
     if "command" in params:
         return params["command"]
     return None

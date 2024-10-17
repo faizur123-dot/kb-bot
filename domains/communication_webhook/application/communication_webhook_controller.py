@@ -10,6 +10,7 @@ import json
 from utils.exception import MyError
 import threading
 from domains.communication_webhook.domain_infrastructure.local_service_client import ServiceInvokeClient
+from domains.communication_webhook.application.helpers import get_slack_event_type
 
 
 def validate_process_user_query(params):
@@ -48,10 +49,41 @@ def send_response_to_user(params):
         user_id = params.get("user_id", None)
         answer = params.get("answer", None)
         channel_id = params.get("channel_id", None)
+        thread_ts = params.get("thread_ts", None)
         facade = CommunicationWebhook(workflow_id)
-        facade.send_response_to_user(question, answer, channel_id, user_id)
+        facade.send_response_to_user(question, answer, channel_id, user_id, thread_ts=thread_ts)
     except Exception as err:
         raise MyError(error_code=500, error_message=f"Unable to send response to user: {err}")
+
+
+def validate_url_verification_request(params):
+    challenge = params.get("challenge", None)
+    if challenge is None:
+        raise Exception("Challenge is missing")
+
+
+def url_verification(params):
+    """
+    Function to verify the url verification request from slack app
+    """
+    validate_url_verification_request(params)
+    challenge = params.get("challenge", None)
+
+    facade = CommunicationWebhook()
+    return facade.url_verification(challenge=challenge)
+
+
+def handle_incoming_webhook_message(params):
+    team_id = params.get("team", None)
+    text = params.get("text", None)
+    user_id = params.get("user", None)
+    message_ts = params.get("ts", None)
+    if message_ts is not None:
+        message_ts = str(message_ts)
+    channel_id = params.get("channel", None)
+    trigger_id = params.get("client_msg_id", " ")
+    process_user_query(text=text, team_id=team_id, user_id=user_id, ts=message_ts, channel_id=channel_id,
+                       trigger_id=trigger_id)
 
 
 def handle_user_query(params):
@@ -85,7 +117,7 @@ def handle_user_query(params):
     return knowledge_base_acknowledge_response
 
 
-def process_user_query(text, user_id, team_id, channel_id, trigger_id):
+def process_user_query(text, user_id, team_id, channel_id, trigger_id, ts: str = None):
     try:
         logger.info(f"Processing query for user_id: {user_id}, text: {text}")
         facade = CommunicationWebhook()
@@ -94,7 +126,8 @@ def process_user_query(text, user_id, team_id, channel_id, trigger_id):
             user_id=user_id,
             team_id=team_id,
             channel_id=channel_id,
-            trigger_id=trigger_id
+            trigger_id=trigger_id,
+            thread_ts=ts
         )
         logger.info(f"Successfully processed query for user_id: {user_id}")
         if workflow_id is None:
@@ -134,6 +167,10 @@ def invoke_slack_function_by_event_type(event, params):
     if slack_operation_type == "slash_command":
         command = get_command(params)
         function_name = command
+    elif slack_operation_type == "event":
+        event = get_slack_event_type(params)
+        params = params.get('event', {})
+        function_name = event
     else:
         err = {
             "error_code": 404,
@@ -242,5 +279,7 @@ def invoke_function_by_key(key, params):
 
 action_to_function_map = {
     "/ask": handle_user_query,
-    "respond_answer_to_user": send_response_to_user
+    "respond_answer_to_user": send_response_to_user,
+    "url_verification": url_verification,
+    "message": handle_incoming_webhook_message
 }

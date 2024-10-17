@@ -1,6 +1,7 @@
 from domains.knowledge_base.application.knowledge_base_controller import query_knowledge_base, categorise_bug
 from infrastructure.local_service_connector import LocalServiceConnector
-from constants.schema.slack_message_fields import SLACK_MESSAGE_TEXT, SLACK_MESSAGE_USER_ID, SLACK_MESSAGE_CHANNEL_ID
+from constants.schema.slack_message_fields import SLACK_MESSAGE_TEXT, SLACK_MESSAGE_USER_ID, SLACK_MESSAGE_CHANNEL_ID, \
+    SLACK_MESSAGE_TS
 from domains.communication_webhook.application.communication_webhook_controller import send_response_to_user
 from domains.ticket_assigner.application.ticket_assigner_controller import assign_ticket_to_user
 from domains.query_flow_manager.core.ports.outgoing.local_service_client_interface import ServiceInvokeClientInterface
@@ -30,6 +31,7 @@ class ServiceInvokeClient(ServiceInvokeClientInterface):
             raise MyError(error_code=500, error_message="Didn't get expected response from KB")
 
     def send_message_to_user(self, workflow_id: int, slack_message_detail: dict, llm_response_data: str):
+        thread_ts = slack_message_detail.get(SLACK_MESSAGE_TS)
         payload = {
             "workflow_id": int(workflow_id),
             "question": slack_message_detail.get(SLACK_MESSAGE_TEXT),
@@ -37,6 +39,8 @@ class ServiceInvokeClient(ServiceInvokeClientInterface):
             "channel_id": slack_message_detail.get(SLACK_MESSAGE_CHANNEL_ID),
             "answer": llm_response_data
         }
+        if thread_ts is not None:
+            payload["thread_ts"] = thread_ts
         function_name = send_response_to_user
         self.service_invoker.invoke_local_function(function_name, function_input=payload)
 

@@ -5,16 +5,14 @@ from domains.communication_webhook.domain_infrastructure.communication_client im
 from constants.constants import KNOWLEDGE_BASE_QUERY_RESPONSE_MESSAGE
 from domains.communication_webhook.core.ports.incoming.communication_webhook import \
     CommunicationWebhookInterface as CommWebhookInterface
+from utils.singleton_class import SingletonMeta
 
 
-class CommunicationWebhook(CommWebhookInterface):
+class CommunicationWebhook(CommWebhookInterface, metaclass=SingletonMeta):
 
-    def __init__(self, workflow_id=None):
+    def __init__(self):
         self.db_client = DBClient()
         self.communication_client = CommunicationClient()
-        self.workflow_id = workflow_id
-        if workflow_id is not None:
-            self.db_client.update_kb_workflow_status_current_state(workflow_id)
 
     @staticmethod
     def url_verification(challenge):
@@ -35,7 +33,9 @@ class CommunicationWebhook(CommWebhookInterface):
         except Exception as err:
             raise err
 
-    def send_response_to_user(self, question: str, answer: str, channel_id: str, user_id: str, thread_ts=None):
+    def send_response_to_user(self, question: str, answer: str, channel_id: str, user_id: str, workflow_id: int,
+                              thread_ts=None):
+        self.db_client.update_kb_workflow_status_current_state(workflow_id)
         knowledge_base_response_json = get_json_from_path(
             "constants/query_response.json"
         )
@@ -53,5 +53,5 @@ class CommunicationWebhook(CommWebhookInterface):
         else:
             self.communication_client.post_thread_message(channel=channel_id, message=answer,
                                                           thread_ts=thread_ts)
-        self.db_client.mark_workflow_status_as_success(workflow_id=self.workflow_id)
+        self.db_client.mark_workflow_status_as_success(workflow_id=workflow_id)
         return

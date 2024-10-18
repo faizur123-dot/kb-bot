@@ -14,7 +14,7 @@ class DBClient(DBInterface):
     """
 
     def __init__(self) -> None:
-        self.db_connector = db_connector.DatabaseConnection()
+        pass
 
     def add_kb_response(self, workflow_id: int, answer: str):
         encoded_answer = encode_string(answer)
@@ -26,7 +26,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            db_connector.DatabaseConnection().upsert_row_into_table(
                 db_tables.LLM_RESPONSE_METADATA, data, [llm_response_metadata_fields.WORKFLOW_ID]
             )
         except Exception as err:
@@ -41,7 +41,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            db_connector.DatabaseConnection().upsert_row_into_table(
                 db_tables.MESSAGE_BUG_CATEGORY, data, [llm_response_metadata_fields.WORKFLOW_ID]
             )
         except Exception as err:
@@ -56,7 +56,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            db_connector.DatabaseConnection().upsert_row_into_table(
                 db_tables.KB_WORKFLOW, data, [kb_workflow_fields.WORKFLOW_ID]
             )
         except Exception as err:

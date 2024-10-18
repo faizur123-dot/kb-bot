@@ -18,7 +18,7 @@ class DBClient(DBClientInterface):
     """
 
     def __init__(self) -> None:
-        self.db_connector = DatabaseConnection()
+        pass
 
     def create_workflow_for_the_trigger(self, slack_trigger_id: str) -> int:
         existing_workflow_id = self._get_workflow_id_of_trigger(slack_trigger_id)
@@ -31,7 +31,7 @@ class DBClient(DBClientInterface):
             }
             data.append(insertion_data)
             try:
-                self.db_connector.insert_row_into_table(
+                DatabaseConnection().insert_row_into_table(
                     db_tables.KB_WORKFLOW, data
                 )
                 new_workflow_id = self._get_workflow_id_of_trigger(slack_trigger_id)
@@ -46,7 +46,7 @@ class DBClient(DBClientInterface):
         condition_dict = dict()
         condition_dict[workflow_response_to_user_fields.WORKFLOW_ID] = [workflow_id]
         try:
-            df = self.db_connector.get_rows_from_table(
+            df = DatabaseConnection().get_rows_from_table(
                 db_tables.WORKFLOW_RESPONSE_TO_USER, workflow_response_to_user_fields.RESPONSE_TEXT,
                 where_condition_dict=condition_dict
             )
@@ -61,7 +61,7 @@ class DBClient(DBClientInterface):
         condition_dict = dict()
         condition_dict[kb_workflow_fields.SLACK_TRIGGER_ID] = [slack_trigger_id]
         try:
-            df = self.db_connector.get_rows_from_table(
+            df = DatabaseConnection().get_rows_from_table(
                 db_tables.KB_WORKFLOW,
                 kb_workflow_fields.WORKFLOW_ID,
                 where_condition_dict=condition_dict,
@@ -87,7 +87,7 @@ class DBClient(DBClientInterface):
             insertion_data[slack_message_fields.SLACK_MESSAGE_TS] = thread_ts
         data.append(insertion_data)
         try:
-            self.db_connector.insert_row_into_table(
+            DatabaseConnection().insert_row_into_table(
                 db_tables.SLACK_MESSAGE, data
             )
         except Exception as err:
@@ -100,7 +100,7 @@ class DBClient(DBClientInterface):
             kb_workflow_fields.WORKFLOW_STATUS: WorkflowStatus.completed.value
         }
         try:
-            self.db_connector.update_row_into_table(
+            DatabaseConnection().update_row_into_table(
                 db_tables.KB_WORKFLOW, data, where_condition_dict=condition_dict
             )
         except Exception as err:
@@ -115,7 +115,7 @@ class DBClient(DBClientInterface):
         }
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            DatabaseConnection().upsert_row_into_table(
                 db_tables.KB_WORKFLOW, data, [kb_workflow_fields.WORKFLOW_ID]
             )
         except Exception as err:

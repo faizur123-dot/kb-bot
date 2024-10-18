@@ -21,8 +21,10 @@ def assign_ticket_to_user(params):
             error_code=422,
             error_message="bug_message_text not provided in request. it is required for every request"
         )
-    facade = TicketAssigner(workflow_id)
-    return facade.create_ticket(bug_description=bug_description, user_name=user_name, bug_category=bug_category)
+    facade = TicketAssigner()
+
+    return facade.create_ticket(bug_description=bug_description, user_name=user_name, bug_category=bug_category,
+                                workflow_id=workflow_id)
 
 
 def invoke_function_by_key(key, params):

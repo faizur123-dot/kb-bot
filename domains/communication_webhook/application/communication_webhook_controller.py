@@ -50,8 +50,9 @@ def send_response_to_user(params):
         answer = params.get("answer", None)
         channel_id = params.get("channel_id", None)
         thread_ts = params.get("thread_ts", None)
-        facade = CommunicationWebhook(workflow_id)
-        facade.send_response_to_user(question, answer, channel_id, user_id, thread_ts=thread_ts)
+        facade = CommunicationWebhook()
+        facade.send_response_to_user(question, answer, channel_id, user_id, thread_ts=thread_ts,
+                                     workflow_id=workflow_id)
     except Exception as err:
         raise MyError(error_code=500, error_message=f"Unable to send response to user: {err}")
 

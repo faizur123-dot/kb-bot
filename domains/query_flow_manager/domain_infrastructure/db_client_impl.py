@@ -17,8 +17,8 @@ class DBClient(DBClientInterface):
     Class to handle all the DB operations
     """
 
-    def __init__(self) -> None:
-        self.db_connector = db_connector.DatabaseConnection()
+    def __init__(self):
+        pass
 
     def update_kb_workflow_status_current_state(self, workflow_id: int, service_name=None):
         data = []
@@ -31,7 +31,7 @@ class DBClient(DBClientInterface):
             insertion_data[kb_workflow_fields.CURRENT_STATE] = service_name
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            db_connector.DatabaseConnection().upsert_row_into_table(
                 db_tables.KB_WORKFLOW, data, [kb_workflow_fields.WORKFLOW_ID]
             )
         except Exception as err:
@@ -44,7 +44,7 @@ class DBClient(DBClientInterface):
             kb_workflow_fields.WORKFLOW_STATUS: current_status
         }
         try:
-            self.db_connector.update_row_into_table(
+            db_connector.DatabaseConnection().update_row_into_table(
                 db_tables.KB_WORKFLOW, data, where_condition_dict=condition_dict
             )
         except Exception as err:
@@ -62,7 +62,7 @@ class DBClient(DBClientInterface):
         ]
         try:
             response_dict = dict()
-            df = self.db_connector.get_rows_from_table(
+            df = db_connector.DatabaseConnection().get_rows_from_table(
                 db_tables.SLACK_MESSAGE, *column_list, where_condition_dict=condition_dict
             )
             if not df.empty:
@@ -90,7 +90,7 @@ class DBClient(DBClientInterface):
         condition_dict = dict()
         condition_dict[jira_bug_cateogry_domain_owner_fields.BUG_CATEGORY] = [bug_category]
         try:
-            df = self.db_connector.get_rows_from_table(
+            df = db_connector.DatabaseConnection().get_rows_from_table(
                 db_tables.JIRA_BUG_CATEGORY_DOMAIN_OWNER, jira_bug_cateogry_domain_owner_fields.BUG_CATEGORY,
                 jira_bug_cateogry_domain_owner_fields.DOMAIN_OWNER_USER_ID, where_condition_dict=condition_dict
             )
@@ -106,7 +106,7 @@ class DBClient(DBClientInterface):
         condition_dict = dict()
         condition_dict[user_fields.USER_ID] = [user_id]
         try:
-            df = self.db_connector.get_rows_from_table(
+            df = db_connector.DatabaseConnection().get_rows_from_table(
                 db_tables.USER_METADATA, user_fields.JIRA_USER_NAME, where_condition_dict=condition_dict
             )
             if not df.empty:
@@ -130,7 +130,7 @@ class DBClient(DBClientInterface):
         insertion_data[workflow_response_to_user_fields.LAST_UPDATED_AT] = 'now()'
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            db_connector.DatabaseConnection().upsert_row_into_table(
                 db_tables.WORKFLOW_RESPONSE_TO_USER, data, [kb_workflow_fields.WORKFLOW_ID]
             )
         except Exception as err:

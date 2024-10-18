@@ -8,6 +8,7 @@ CREATED_BY = "created_by"
 LAST_UPDATED_BY = "last_updated_by"
 LAST_UPDATED_AT = "last_updated_at"
 TEAM_ID = "team_id"
+SLACK_MESSAGE_TS = "slack_message_ts"
 ALL_FIELDS = [
     ID,
     SLACK_MESSAGE_TEXT,

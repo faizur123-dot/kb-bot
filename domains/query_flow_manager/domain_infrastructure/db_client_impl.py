@@ -17,7 +17,7 @@ class DBClient(DBClientInterface):
     Class to handle all the DB operations
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         pass
 
     def update_kb_workflow_status_current_state(self, workflow_id: int, service_name=None):
@@ -57,7 +57,8 @@ class DBClient(DBClientInterface):
             slack_message_fields.SLACK_MESSAGE_USER_ID,
             slack_message_fields.SLACK_MESSAGE_CHANNEL_ID,
             slack_message_fields.SLACK_MESSAGE_TEXT,
-            slack_message_fields.TEAM_ID
+            slack_message_fields.TEAM_ID,
+            slack_message_fields.SLACK_MESSAGE_TS
         ]
         try:
             response_dict = dict()
@@ -73,7 +74,8 @@ class DBClient(DBClientInterface):
                     slack_message_fields.SLACK_MESSAGE_CHANNEL_ID:
                         df[slack_message_fields.SLACK_MESSAGE_CHANNEL_ID].iloc[0],
                     slack_message_fields.SLACK_MESSAGE_TEXT: slack_message_text,
-                    slack_message_fields.TEAM_ID: df[slack_message_fields.TEAM_ID].iloc[0]
+                    slack_message_fields.TEAM_ID: df[slack_message_fields.TEAM_ID].iloc[0],
+                    slack_message_fields.SLACK_MESSAGE_TS: df[slack_message_fields.SLACK_MESSAGE_TS].iloc[0]
                 }
             return response_dict
         except Exception as err:

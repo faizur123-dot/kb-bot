@@ -14,7 +14,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 class VectorStoreClientImpl(VectorStoreClientInterface):
 
     def __init__(self):
-        self.vector_store = PineConeClient(constants.constants.PINECONE_INDEX)
+        self.vector_store = PineConeClient()
         self.embeddings = OpenAIEmbeddings()
         self.index = self.vector_store.index
 

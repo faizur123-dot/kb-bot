@@ -3,22 +3,22 @@ from domains.ticket_assigner.domain_infrastructure.db_client_impl import DBClien
 from domains.ticket_assigner.core.ports.incoming.ticket_assigner_interface import TicketAssignerInterface
 from utils.response import MyResponse
 from utils.exception import MyError
+from utils.singleton_class import SingletonMeta
 
 
-class TicketAssigner(TicketAssignerInterface):
+class TicketAssigner(TicketAssignerInterface, metaclass=SingletonMeta):
 
-    def __init__(self, workflow_id: int):
-        self.workflow_id = workflow_id
+    def __init__(self):
         self.ticket_service_client = TicketServiceClient()
         self.db_client = DBClient()
-        self.db_client.update_kb_workflow_status_current_state(self.workflow_id)
 
-    def create_ticket(self, bug_description: str, bug_category: str, user_name: str):
+    def create_ticket(self, bug_description: str, bug_category: str, user_name: str, workflow_id: int):
         try:
+            self.db_client.update_kb_workflow_status_current_state(workflow_id)
             ticket_url = self.ticket_service_client.create_ticket(bug_summary=bug_description,
                                                                   bug_category=bug_category,
                                                                   user_name=user_name)
-            self.db_client.add_jira_bug_detail(self.workflow_id, ticket_url)
+            self.db_client.add_jira_bug_detail(workflow_id, ticket_url)
             response = {
                 "ticket_link": ticket_url
             }

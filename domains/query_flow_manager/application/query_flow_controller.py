@@ -15,8 +15,8 @@ def process_slack_message(params):
             error_code=422,
             error_message="workflow_id not provided in request. It is required for every request.",
         )
-    facade = QueryFlowManager(workflow_id)
-    return facade.process_message_received_from_slack(question)
+    facade = QueryFlowManager()
+    return facade.process_message_received_from_slack(question, workflow_id)
 
 
 def invoke_function_by_key(key, params):

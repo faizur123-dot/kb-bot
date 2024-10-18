@@ -37,6 +37,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.error(f"Error during initialization of {component_name}: {str(e)}", exc_info=True)
             raise e
+    logger.info("All components loaded successfully")
     yield
     logger.info("Shutting down and cleaning up resources.")
     try:

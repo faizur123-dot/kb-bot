@@ -12,7 +12,7 @@ class DBClient(DBInterface):
     """
 
     def __init__(self) -> None:
-        self.db_connector = db_connector.DatabaseConnection()
+        pass
 
     def add_jira_bug_detail(self, workflow_id: int, ticket_link: str, user_name: str = None):
         data = []
@@ -25,7 +25,7 @@ class DBClient(DBInterface):
             insertion_data[jira_bug_details_fields.ASSIGNEE_USER_NAME] = user_name
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            db_connector.DatabaseConnection().upsert_row_into_table(
                 db_tables.JIRA_BUG_DETAILS, data, [jira_bug_details_fields.WORKFLOW_ID]
             )
         except Exception as err:
@@ -40,7 +40,7 @@ class DBClient(DBInterface):
         }
         data.append(insertion_data)
         try:
-            self.db_connector.upsert_row_into_table(
+            db_connector.DatabaseConnection().upsert_row_into_table(
                 db_tables.KB_WORKFLOW, data, [kb_workflow_fields.WORKFLOW_ID]
             )
         except Exception as err:

@@ -1,7 +1,5 @@
 import threading
 
-from utils.logger import logger
-
 
 class SingletonMeta(type):
     _instances = {}

@@ -67,5 +67,5 @@ app.include_router(query_workflow_router.router)
 
 if __name__ == "__main__":
     port = os.environ.get("PORT", 8080)
-    logger.info(f"Starting the FastAPI server at port {port}")
-    uvicorn.run(app, host="0.0.0.0", port=int(port))
+    logger.info("Starting the FastAPI server at port " + str(port))
+    uvicorn.run(app, host="", port=port)

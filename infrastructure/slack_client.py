@@ -46,3 +46,13 @@ class SlackClientImpl:
             client.chat_postEphemeral(
                 channel=channel, user=user, text=message, blocks=blocks
             )
+
+    def post_message_in_thread(self, channel, message, thread_ts=None, blocks=None):
+        client = self.app.client
+        response = client.chat_postMessage(
+            channel=channel,
+            text=message,
+            thread_ts=thread_ts,
+            blocks=blocks
+        )
+        return response

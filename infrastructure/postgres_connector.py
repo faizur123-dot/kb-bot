@@ -2,9 +2,10 @@ import pandas as pd
 from constants import constants
 import psycopg2
 import os
+from utils.singleton_class import SingletonMeta
 
 
-class DatabaseConnection:
+class DatabaseConnection(metaclass=SingletonMeta):
 
     def __init__(self):
         self.connection = None

@@ -73,7 +73,7 @@ class DBClient(DBClientInterface):
             raise err
 
     def add_slack_message_details(self, workflow_id: int, slack_message_user_id: str, slack_message_channel_id: str,
-                                  slack_message_text: str, team_id: str):
+                                  slack_message_text: str, team_id: str, thread_ts: str = None):
         data = []
         slack_message_text = encode_string(slack_message_text)
         insertion_data = {
@@ -81,8 +81,10 @@ class DBClient(DBClientInterface):
             slack_message_fields.SLACK_MESSAGE_USER_ID: slack_message_user_id,
             slack_message_fields.SLACK_MESSAGE_CHANNEL_ID: slack_message_channel_id,
             slack_message_fields.SLACK_MESSAGE_TEXT: slack_message_text,
-            slack_message_fields.TEAM_ID: team_id
+            slack_message_fields.TEAM_ID: team_id,
         }
+        if thread_ts is not None:
+            insertion_data[slack_message_fields.SLACK_MESSAGE_TS] = thread_ts
         data.append(insertion_data)
         try:
             DatabaseConnection().insert_row_into_table(

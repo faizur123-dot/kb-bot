@@ -22,3 +22,17 @@ class CommunicationClient(CommunicationClientInterface):
                 error_code=500,
                 error_message=f"could not send message to the user: {err}"
             )
+
+    def post_thread_message(self, channel: str, message: str, thread_ts, blocks=None):
+        try:
+            self.communication_client.post_message_in_thread(
+                channel=channel,
+                message=message,
+                blocks=blocks,
+                thread_ts=thread_ts,
+            )
+        except Exception as err:
+            raise MyError(
+                error_code=500,
+                error_message=f"could not send message to the user: {err}"
+            )

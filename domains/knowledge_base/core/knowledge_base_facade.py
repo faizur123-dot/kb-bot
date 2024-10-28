@@ -1,4 +1,4 @@
-
+from utils.singleton_class import SingletonMeta
 from constants.constants import CHUNK_SIZE, CHUNK_OVERLAP, EMBEDDED_TEXT, SRC, SRC_TEXT
 from domains.knowledge_base.core.ports.incoming.knowledge_base import KnowledgeBase as KBInterface
 from domains.knowledge_base.domain_infrastructure.file_handler import fetch_file
@@ -11,19 +11,19 @@ from domains.knowledge_base.domain_infrastructure.db_client_impl import DBClient
 from domains.knowledge_base.domain_infrastructure.file_handler import convert_src_text_to_txt_file
 
 
-class KnowledgeBaseFacade(KBInterface):
+class KnowledgeBase(KBInterface, metaclass=SingletonMeta):
 
-    def __init__(self, workflow_id: int = None):
-        self.workflow_id = workflow_id
+    def __init__(self):
         self.document_loader = TextDocumentLoader()
         self.text_splitter = RecursiveTextSplitter(CHUNK_SIZE, CHUNK_OVERLAP)
         self.vector_store = VectorStoreClientImpl()
         self.llm = OpenAILLM()
         self.db_client = DBClient()
-        if workflow_id is not None:
-            self.db_client.update_kb_workflow_status_current_state(self.workflow_id)
 
-    def add_data_to_knowledge_base(self, source: str, src_filepath: str = None, bug_resolution_data=None):
+    def add_data_to_knowledge_base(self, source: str, src_filepath: str = None, bug_resolution_data=None,
+                                   workflow_id: int = None):
+        if workflow_id is not None:
+            self.db_client.update_kb_workflow_status_current_state(workflow_id)
         if bug_resolution_data is not None:
             text_file = convert_src_text_to_txt_file(bug_resolution_data)
         else:
